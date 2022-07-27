@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Time Teller</title>
+    <script>
+        let time;
+        let date;
+        let today;
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        setInterval(() => {
+            today = new Date();
+            date = today.toLocaleDateString(undefined,options);
+            time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+            document.getElementById('time').innerHTML = time;
+            document.getElementById('date').innerHTML = 'on '+date;
+        }, 1000);
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <form class="container-fluid justify-content-start">
+            <a class="navbar-brand font-monospace" href="#">
+                Time Teller
+            </a>
+            <button class="btn btn-outline-warning fw-bold" type="button" onclick="window.location.href='https://www.wfp.org/';">Donate!</button>
+        </form>
+    </nav>
+    <div class="container my-4">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Current Time Is: <br><span class="badge bg-secondary" id="time"></span></h1>
+            <h2><span class="badge bg-secondary" id="date">New</span></h2>
+            <p class="font-monospace fw-semibold fs-3">THIS IS HERE TO JUST TELL THE TIME.</p>
+            <button type="button" class="btn btn-outline-info" onclick="window.location.href='https://www.timeanddate.com/worldclock/';">Browse Time</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+</body>
+</html>

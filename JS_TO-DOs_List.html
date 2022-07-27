@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Personal TO-DOs List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand fw-semibold ">TO-DOs List</a>
+             <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+    <div class="my-4 container center_div">
+        <h1 class="text-center my-4">My TO-DOs List</h1>
+
+        <form class="container center_div">
+            <div class="form-floating form-group ">
+                <input class="form-control" id="title"></input>
+                <label for="title">Title</label>
+                <small id="titleHelp" class="form-text text-muted my-4">Please give a title for your important task.</small>
+            </div>
+            <div class="form-floating form-group" style="margin-top: 15px">
+                <textarea class="form-control" id="description" style="height: 100px"></textarea>
+                <label for="description">Description</label>
+            </div>
+            <button type="submit" id="add" class="btn btn-primary" style="margin-top: 15px">Add To List</button>
+            <button id="clear"class="btn btn-primary"onclick='clearstorage()'style="margin-top: 15px">Clear List</button>
+        </form>
+        <div id="items" class="my-4">
+            <h2>Items</h2>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Items</th>
+                    <th scope="col">Item Description</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody">
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Get Coffe</td>
+                    <td>You Need Coffee</td>
+                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                  </tr>
+                </tbody>
+              </table>
+
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script>
+        function getAndUpdate(){
+            console.log("Updating List...");
+            tit = document.getElementById('title').value;
+            desc = document.getElementById('description').value;
+            if (localStorage.getItem('itemsJson')==null){
+                itemJsonArray = [];
+                itemJsonArray.push([tit, desc]);
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            }
+            else{
+                itemJsonArrayStr = localStorage.getItem('itemsJson')
+                itemJsonArray = JSON.parse(itemJsonArrayStr);
+                itemJsonArray.push([tit, desc]);
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            }
+            update();
+        }
+
+        function update(){
+            if (localStorage.getItem('itemsJson')==null){
+                itemJsonArray = []; 
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            } 
+            else{
+                itemJsonArrayStr = localStorage.getItem('itemsJson')
+                itemJsonArray = JSON.parse(itemJsonArrayStr); 
+            }
+            // Populate the table
+            let tableBody = document.getElementById("tableBody");
+            let str = "";
+            itemJsonArray.forEach((element, index) => {
+                str += `
+                <tr>
+                <th scope="row">${index + 1}</th>
+                <td>${element[0]}</td>
+                <td>${element[1]}</td> 
+                <td><button class="btn btn-sm btn-danger" onclick="deleted(${index})">Delete</button></td> 
+                </tr>`; 
+            });
+            tableBody.innerHTML = str;
+        }
+        add = document.getElementById("add");
+        add.addEventListener("click", getAndUpdate);
+        update();
+        function deleted(itemIndex){
+                console.log("Delete", itemIndex);
+                itemJsonArrayStr = localStorage.getItem('itemsJson')
+                itemJsonArray = JSON.parse(itemJsonArrayStr);
+                itemJsonArray.splice(itemIndex, 1);
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray));
+                update();
+        }
+
+        function clearstorage(){
+            if(confirm('Do you wan to clear your list?')){
+                console.log('Clearing Storage');
+                localStorage.clear();
+                update();
+            }
+        }
+    </script>
+  </body>
+</html>
